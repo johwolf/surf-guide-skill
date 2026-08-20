@@ -1,6 +1,6 @@
 ---
 name: surf-guide
-description: Personal surf guide that turns a location, the surfer's ability level, and live forecast data into a call on which spots are worth paddling out at, and when. ALWAYS use for "where should I surf today", "are the conditions any good", "which spot is working", "is it worth going out tomorrow", for surf forecast, swell, tide or wave condition questions, for a surf check, and for finding surf spots in a region — including when someone only names a place ("how's Fuerteventura looking?", "Hossegor tomorrow?") and never says "forecast" or "surf check". Also use for picking a surf destination or season ("where should I learn to surf in November?", "best time for Portugal?"), for whether a named spot suits someone's level, and for what board volume or wetsuit thickness fits the conditions on a given day. Do NOT use for general weather questions with no surfing intent, for swimming or beach safety, for how-to coaching on technique, or for gear purchase advice that isn't tied to specific conditions.
+description: "Give level-matched surf calls from a location and current forecast data: rank suitable spots, identify the best time window, explain hazards, and suggest condition-specific board or wetsuit choices. Use for surf forecasts, surf checks, spot or destination selection, season questions, and whether a spot suits the surfer's ability. Do not use for general weather, swimming or beach safety, technique coaching, or gear advice unrelated to current conditions."
 ---
 
 # Surf Guide
@@ -72,10 +72,11 @@ newer. The full rules, the glossary and a worked example are in
 
 ### Step 1 — Get the surfer's profile (don't skip this)
 
-**Check memory before you ask anything.** If memory is available, read
-`/topics/surfing.md` — that's where this skill keeps the surfer's level and
-standing preferences. If it's there, use it and go straight to Step 2 without
-asking. Nobody wants to re-declare their ability every single time.
+**Use known context before asking anything.** Check the current conversation and
+any host-provided memory for the surfer's level and standing preferences. If the
+details are already available and still consistent with what the user says now,
+use them and go straight to Step 2. Never assume a particular memory file or
+absolute filesystem path exists.
 
 If there's no level on file, ask **in one message** — not one question at a time:
 
@@ -87,17 +88,18 @@ If there's no level on file, ask **in one message** — not one question at a ti
 4. **Gear** — board and wetsuit, if it matters. In small, weak surf the board
    volume decides whether there's a session at all.
 
-If interactive choice buttons are available, use them — level and timing are
-pick-one questions, not essay questions.
+If the host exposes interactive choice controls, they can be used for level and
+timing. Otherwise ask the same compact questions in ordinary chat.
 
 Don't ask about things you can research yourself: spot names, coastline
 orientation, tide times. That's your job, not theirs.
 
 If they won't name a level or seem unsure, place them one tier lower and say so.
 
-Once they've answered, write the durable parts to `/topics/surfing.md` — level,
-usual board, home region, driving radius. Not the one-off stuff: today's date,
-this trip's dates, which spot they picked this time.
+If the host provides a memory feature and saving is permitted, retain only the
+durable parts: level, usual board, home region, and driving radius. Do not store
+one-off details such as today's date, trip dates, or the selected spot. If no
+memory feature is available, continue without persistence.
 
 ```
 - [stated] surf level: tier 2 (green waves, no reliable duck dive)
@@ -125,10 +127,11 @@ search for spots, then pull the forecast data, then check the tides"). The user
 doesn't care about the pipeline; they care about not staring at a blank screen
 wondering if it's broken.
 
-**Read `/topics/surf-spots.md` first** if memory is available. Spot properties
-barely change — orientation, break type and swell window are the same this year
-as last. Anything already on file needs no research at all, which is where most
-of the time and most of the risk in this step sits.
+**Reuse verified spot knowledge** from the current conversation or host-provided
+memory when available. Spot properties barely change — orientation, break type
+and swell window are usually stable. Treat stored details as a cache, not as a
+substitute for checking time-sensitive hazards, closures, access, webcams, or
+forecast data.
 
 For spots not on file, search regional guides ("surf spots [region] beginner",
 "[region] surf guide reef beach break").
@@ -155,10 +158,9 @@ telling them that without a link is advice nobody acts on. Search
 prefer free ones — local surf schools, town cams, Skyline Webcams. If there's no
 free cam for a spot, note that instead of linking a paywalled one.
 
-**Write verified spots to `/topics/surf-spots.md`.** One line per spot, and only
-once you've actually confirmed the details from a source — never from your own
-recall, because the whole point of the file is that it's more trustworthy than
-guessing:
+**Retain verified spot details when supported.** If the host provides a memory
+feature and saving is permitted, store one entry per spot only after confirming
+the details from a source — never from unaided recall:
 
 ```
 - [stated] Cotillo (Fuerteventura): 28.68,-14.01, faces W (270), beach break,
@@ -177,9 +179,12 @@ without pulling a single number. You should be down to 3–5 real candidates.
 
 Read `references/guide.md` data-sources section first.
 
-Run `scripts/forecast.py --compact` with all candidates in one call. Tides
-via web search ("tide times [place] [date]"). Surfline/local forecasters for
-qualitative read only (paywall — supplements, not replaces numbers).
+When local script execution and network access are available, run the bundled
+`scripts/forecast.py --compact` with all candidates in one call, resolving the
+path relative to this skill directory. Otherwise query Open-Meteo or another
+current numerical forecast source through the host's web tools. Get tides via
+web search ("tide times [place] [date]"). Use Surfline or local forecasters for
+a qualitative read only; they supplement rather than replace numerical data.
 
 **Budget:** compact script calls are cheap — 3–5 candidates, no problem.
 Fallback (forecast web pages): max 2–3 fetches; trim candidates first.
@@ -298,16 +303,13 @@ is noise. Say so.
 - `references/guide.md` — which sources, in what order, with what limits,
   including the fallback. Read before Step 3.
 - `scripts/forecast.py` — pulls swell, wind and weather for one or several spots
-  from Open-Meteo as a compact hourly table. Usage in data-sources.md.
+  from Open-Meteo as a compact hourly table. Usage is in `references/guide.md`.
 
-## Memory files this skill uses
+## Optional persistence
 
-- `/topics/surfing.md` — the surfer's level, board, home region, driving radius.
-  Read in Step 1, written once they've told you. Stops the level question
-  repeating every session.
-- `/topics/surf-spots.md` — verified spot properties: coordinates, facing,
-  break type, swell window, tide, hazards, cam URL. Read in Step 2, appended
-  whenever a spot is newly researched.
-
-Both are optional — if memory isn't available, research everything fresh and
-carry on. Nothing here should block the answer.
+Use host-provided memory only when it is available and permitted. Useful durable
+details are the surfer's level, board, home region and driving radius, plus
+verified spot coordinates, facing, break type, swell window, tide behavior,
+stable hazards and webcam URL. Do not invent `/topics/...` files or write outside
+the current workspace. If persistence is unavailable, research fresh and carry
+on; it must never block the answer.
