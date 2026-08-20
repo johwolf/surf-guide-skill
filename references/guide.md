@@ -101,20 +101,23 @@ python scripts/forecast.py --days 2 \
 ```
 Format: `Name:lat,lon[,facing]`. All spots in one call. Use `--compact` for
 a summary instead of hourly rows (preferred — saves tokens).
-On 403: tell user once (Settings → Domain allowlist, add
-`marine-api.open-meteo.com` + `api.open-meteo.com`), then fall back to D.
+On a network denial, name the required domains once
+(`marine-api.open-meteo.com` and `api.open-meteo.com`) and ask the user to allow
+them through the host's network controls when supported; otherwise fall back to D.
 
 **B. Tides** — search "tide times [place] [date]". Open-Meteo has none.
 
 **C. Spot knowledge** — Surfline (descriptions, not numbers — paywall),
 surf-forecast.com (orientation, swell window, tide), Windguru/Windfinder
-(cross-check). Record verified spots in `/topics/surf-spots.md`.
+(cross-check). Reuse or retain verified spot details only through a host-provided
+memory feature when available and permitted.
 
 **D. Fallback** — search `surf-forecast.com <spot> forecast`, fetch the
 result. Max 2–3 spots. Wind in km/h, convert before comparing thresholds.
 
 **Webcams** — prefer free (surf schools, Skyline Webcams). Surfline cams
-need subscription. Record URL in spot file.
+need subscription. Retain the URL with other spot details when persistence is
+available.
 
 **Complex coasts** (peninsula, deep bay, island lee — Cape Town, west
 Ireland, Canaries, Indonesia): model is systematically wrong, not uncertain.

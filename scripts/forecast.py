@@ -6,7 +6,7 @@ Handles several spots in ONE pair of requests, so five candidates cost two
 HTTP calls instead of ten. Far cheaper in tokens than fetching forecast pages.
 
 Requires network access to api.open-meteo.com and marine-api.open-meteo.com.
-On 403 "Host not in allowlist" see references/data-sources.md.
+On 403 or another network restriction, see references/guide.md.
 
 Several spots (preferred):
   python scripts/forecast.py --days 2 \\
@@ -47,7 +47,7 @@ def get(url, params):
         print(f"ERROR fetching {url}: {e}", file=sys.stderr)
         print("If this is 403/Host not in allowlist: network access is not "
               "enabled. Switch to the fallback sources in "
-              "references/data-sources.md.", file=sys.stderr)
+              "references/guide.md.", file=sys.stderr)
         sys.exit(2)
     # Open-Meteo returns a bare object for one location, a list for several.
     return data if isinstance(data, list) else [data]

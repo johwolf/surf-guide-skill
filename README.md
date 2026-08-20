@@ -1,6 +1,6 @@
-# 🏄 Surf Guide — Claude Skill
+# 🏄 Surf Guide — Claude, ChatGPT & Codex Skill
 
-A personal surf guide skill for [Claude](https://claude.ai). Give it a location and your ability level, and it pulls live forecast data to tell you which spots are worth paddling out at — and when.
+A portable agent skill for [Claude](https://claude.ai), ChatGPT, and Codex. Give it a location and your ability level, and it pulls live forecast data to tell you which spots are worth paddling out at — and when.
 
 ## What it does
 
@@ -16,7 +16,7 @@ Built for surfers of all levels. Beginners get plain-language explanations and c
 
 > **You:** How's it looking in Sagres today? I'm on a softtop, just finished my first week of lessons.
 >
-> **Claude:** *Sagres, nice — give me a minute to check what's running.*
+> **Surf Guide:** *Sagres, nice — give me a minute to check what's running.*
 >
 > *[researches spots, pulls forecast, checks tides]*
 >
@@ -24,18 +24,36 @@ Built for surfers of all levels. Beginners get plain-language explanations and c
 
 ## Install
 
-### As a Claude skill (recommended)
+### Claude
 
 1. Download the `.skill` file from [Releases](../../releases)
 2. In Claude → Settings → Skills → drag the file in
 
-### Manual
+### ChatGPT
 
-Copy the folder structure into your Claude skills directory:
+1. Download the `.skill` file from [Releases](../../releases)
+2. Open **Skills** in the ChatGPT desktop app and import the file
+
+### Codex
+
+Ask Codex to install this repository with `$skill-installer`:
+
+```text
+$skill-installer install https://github.com/johwolf/surf-guide-skill
+```
+
+You can then invoke it explicitly with `$surf-guide`; Codex can also activate it
+automatically when the request matches the skill description.
+
+### Manual / other compatible hosts
+
+Copy the folder into the host's skills directory while keeping this structure:
 
 ```
 surf-guide/
 ├── SKILL.md              # Main skill instructions
+├── agents/
+│   └── openai.yaml       # ChatGPT/Codex UI metadata
 ├── references/
 │   └── guide.md          # Levels, scoring, data sources, glossary
 └── scripts/
@@ -46,23 +64,22 @@ surf-guide/
 
 ### Network allowlist (optional but recommended)
 
-The skill includes a Python script that pulls forecast data directly from Open-Meteo — much faster and cheaper than scraping forecast websites. To enable it:
+The skill includes a Python script that pulls forecast data directly from Open-Meteo — much faster and cheaper than scraping forecast websites. Allow network access to these domains when your host asks:
 
-**Settings → Capabilities → Code execution and file creation → Domain allowlist**
-
-Add these two domains:
 - `marine-api.open-meteo.com`
 - `api.open-meteo.com`
 
-Without this, the skill falls back to web searches on surf-forecast.com. It works, just slower and more expensive in tokens.
+In Claude, add them under **Settings → Capabilities → Code execution and file
+creation → Domain allowlist**. ChatGPT and Codex use their own network permission
+controls. Without script access, the skill falls back to current web forecast
+sources.
 
 ### Memory (optional)
 
-If memory is enabled, the skill stores:
-- **Your surf level** in `/topics/surfing.md` — so it doesn't ask every time
-- **Verified spot data** in `/topics/surf-spots.md` — coordinates, orientation, break type, cam links
-
-Both build up naturally as you use the skill. Nothing is stored without your input.
+If the host provides memory and saving is permitted, the skill can retain your
+surf level, usual board, home region, driving radius, and verified spot data.
+It does not require Claude-specific `/topics/...` paths, so the same workflow is
+portable across supported hosts. Without memory, it simply researches fresh.
 
 ## How it rates spots
 

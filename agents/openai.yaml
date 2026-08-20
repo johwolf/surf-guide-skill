@@ -1,0 +1,7 @@
+interface:
+  display_name: "Surf Guide"
+  short_description: "Level-matched live surf forecasts and spot calls"
+  default_prompt: "Use $surf-guide to find the best suitable surf spot and time window for me."
+
+policy:
+  allow_implicit_invocation: true
